@@ -1,0 +1,37 @@
+[
+    {
+        "firstName": "Salvidor",
+        "lastName": "Archer",
+        "age": 12,
+        "gender": "Male",
+        "UserId": 2
+    },
+    {
+        "firstName": "Tuckie",
+        "lastName": "Youle",
+        "age": 49,
+        "gender": "Male",
+        "UserId": 1
+    },
+    {
+        "firstName": "Ingamar",
+        "lastName": "Becconsall",
+        "age": 33,
+        "gender": "Male",
+        "UserId": 3
+    },
+    {
+        "firstName": "Edgard",
+        "lastName": "Moles",
+        "age": 18,
+        "gender": "Female",
+        "UserId": 4
+    },
+    {
+        "firstName": "Bellina",
+        "lastName": "Paulitschke",
+        "age": 24,
+        "gender": "Female",
+        "UserId": 5
+    }
+]

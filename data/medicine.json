@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Isagel",
+        "description": "Cannabis abuse with psychotic disorder, unspecified",
+        "medicineLevel": "High",
+        "manufactureCode": "11701-025",
+        "stock": 85,
+        "price": 20576,
+        "CategoryId": 1
+    },
+    {
+        "name": "CareOne Daytime Cold Flu Relief",
+        "description": "Pnctr w fb of unsp lesser toe(s) w damage to nail, init",
+        "medicineLevel": "Low",
+        "manufactureCode": "41520-656",
+        "stock": 87,
+        "price": 38442,
+        "CategoryId": 1
+    },
+    {
+        "name": "Pramipexole Dihydrochloride",
+        "description": "Other secondary osteonecrosis of unspecified ulna",
+        "medicineLevel": "Medium",
+        "manufactureCode": "13668-091",
+        "stock": 49,
+        "price": 31793,
+        "CategoryId": 2
+    },
+    {
+        "name": "Cephalexin",
+        "description": "Displ artic fx head of unsp femr, 7thQ",
+        "medicineLevel": "Low",
+        "manufactureCode": "42549-565",
+        "stock": 40,
+        "price": 60426,
+        "CategoryId": 3
+    },
+    {
+        "name": "GLYCOPYRROLATE",
+        "description": "Displ avuls fx tuberosity of l calcaneus, 7thG",
+        "medicineLevel": "High",
+        "manufactureCode": "0615-7576",
+        "stock": 86,
+        "price": 55995,
+        "CategoryId": 4
+
+    }
+]
