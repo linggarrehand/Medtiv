@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Medicine</title>
+</head>
+<body>
+    <h1>Edit Medicine</h1>
+    <div>
+        <a href="/category/<%= category.id %>"><button>Back</button></a>
+    </div><br>
+    <form action="/category/<%= category.id %>/medicine/<%= medicineData.id %>/edit" method="post">
+        <div>
+            <label>Medicine Name</label><br>
+            <input type="text" name="name" value="<%= medicineData.name %>">
+        </div> <br>
+        <div>
+            <label>Medicine Description</label><br>
+            <input type="text" name="description" value="<%= medicineData.description %>">
+        </div> <br>
+        <div>
+            <label>Medicine Level</label><br>
+            <select name="medicineLevel">
+                <% const levelArr = ['High', 'Medium', 'Low'] %>
+                <% levelArr.forEach (el => { %>
+                    <option value="<%= el %>"<%= (el === medicineData.medicineLevel)? 'selected':'' %>><%= el %> </option>
+                <% }) %>  
+            </select>
+        </div> <br>
+        <div>
+            <label>Stock</label><br>
+            <input type="number" name="stock" value="<%= medicineData.stock %>">
+        </div> <br>
+        <div>
+            <label>Price</label><br>
+            <input type="number" name="price" value="<%= medicineData.price %>">
+        </div> <br>
+        <input type="submit" value="Update Medicine">
+    </form>
+</body>
+</html>

@@ -1,6 +1,7 @@
 const {Category, Medicine, Transaction, User, UserProfile} = require ('../models')
 const bcrypt = require ('bcryptjs')
 const { formatCurrency } = require('../helpers')
+const { Op } = require('sequelize')
 class Controller {
     static landingPage (req, res) {
         res.render ('landing-page')
@@ -45,9 +46,25 @@ class Controller {
             .catch(err => res.send(err))
     }
     static showMedicineCategory(req, res) {
+        const { success, search } = req.query
         const { categoryId } = req.params
-        Category.findByPk(categoryId, { include: Medicine })
-            .then((category) => res.render('detail-category', { category, formatCurrency }))
+        let options = {
+            include: Medicine,
+        }
+        if (search) {
+            options = {
+                include : {
+                    model : Medicine,
+                    where : {
+                        name : {
+                            [Op.iLike] : `%${search}%`
+                        }
+                    }
+                }
+            }
+        }
+        Category.findByPk(categoryId, options)
+            .then((category) => res.render('detail-category', { category, formatCurrency, success }))
             .catch(err => res.send(err))
     }
     static addMedicine (req, res) {
@@ -65,13 +82,48 @@ class Controller {
             .catch(err => res.send(err))
     }
     static editMedicine (req, res) {
-        res.send ('ok')
+        const { categoryId, medicineId } = req.params
+        let medicineData
+        Medicine.findByPk(medicineId)
+            .then(medicine => {
+                medicineData = medicine
+                return Category.findByPk(categoryId)
+            })
+            .then(category => res.render('edit-medicine', { category, medicineData }))
+            .catch(err => res.send(err))
     }
     static updateMedicine (req, res) {
-        res.send ('ok')
+        const { categoryId, medicineId } = req.params
+        const id = medicineId
+        const CategoryId = categoryId
+        const { name, description, medicineLevel, stock, price } = req.body
+        Medicine.update({ name, description, medicineLevel, stock, price, CategoryId }, {
+            where: {
+                id
+            }
+        })
+            .then(() => res.redirect(`/category/${CategoryId}`))
+            .catch(err => res.send(err))
     }
     static deleteMedicine (req, res) {
-        res.send ('ok')
+        const { categoryId, medicineId } = req.params
+        let medicineName
+        let medicineLevel
+        Medicine.findByPk(medicineId)
+            .then(medicine => {
+                medicineName = medicine.name
+                medicineLevel = medicine.medicineLevel
+                const id = medicine.id
+                return Medicine.destroy({
+                    where: {
+                        id
+                    }
+                })
+            })
+            .then(() => {
+                res.redirect(`/category/${categoryId}?success=Medicine ${medicineName} with level ${medicineLevel} has been removed`);
+            })
+            .catch(err => res.send(err))
     }
 }
 

@@ -12,8 +12,17 @@
         <a href="/category"><button>Back</button></a>
     </div><br>
     <div>
+        <p style="color:red;"><%= success %> </p>
+    </div>
+    <div>
         <p>Click <a href="/category/<%= category.id %>/medicine/add"><button>Add</button></a> to add Medicine</p>
-    </div> <br>
+    </div> 
+    <form action="" method="get">
+        <p>
+            <input type="text" name="search">
+            <button type="submit">Search</button>
+        </p>
+    </form><br>
     <table border="1" cellspacing="0">
         <tr>
             <th>No</th>
