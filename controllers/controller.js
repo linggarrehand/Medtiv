@@ -1,5 +1,6 @@
 const {Category, Medicine, Transaction, User, UserProfile} = require ('../models')
 const bcrypt = require ('bcryptjs')
+const { formatCurrency } = require('../helpers')
 class Controller {
     static landingPage (req, res) {
         res.render ('landing-page')
@@ -39,7 +40,38 @@ class Controller {
             .catch (err => res.send(err))
     }
     static showCategory(req, res) {
-        res.render ('category')
+        Category.findAll()
+            .then(category => res.render('category', { category }))
+            .catch(err => res.send(err))
+    }
+    static showMedicineCategory(req, res) {
+        const { categoryId } = req.params
+        Category.findByPk(categoryId, { include: Medicine })
+            .then((category) => res.render('detail-category', { category, formatCurrency }))
+            .catch(err => res.send(err))
+    }
+    static addMedicine (req, res) {
+        const { categoryId } = req.params
+        Category.findByPk(categoryId)
+            .then(category => res.render('add-medicine', { category }))
+            .catch(err => res.send(err))
+    }
+    static createMedicine (req, res) {
+        let { categoryId } = req.params
+        let CategoryId = categoryId
+        const { name, description, medicineLevel, stock, price } = req.body
+        Medicine.create({ name, description, medicineLevel, stock, price, CategoryId })
+            .then(() => res.redirect(`/category/${CategoryId}`))
+            .catch(err => res.send(err))
+    }
+    static editMedicine (req, res) {
+        res.send ('ok')
+    }
+    static updateMedicine (req, res) {
+        res.send ('ok')
+    }
+    static deleteMedicine (req, res) {
+        res.send ('ok')
     }
 }
 

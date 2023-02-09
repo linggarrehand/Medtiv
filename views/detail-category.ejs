@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Category</title>
+</head>
+<body>
+    <h1>Medicine per Category</h1>
+    <div>
+        <a href="/category"><button>Back</button></a>
+    </div><br>
+    <div>
+        <p>Click <a href="/category/<%= category.id %>/medicine/add"><button>Add</button></a> to add Medicine</p>
+    </div> <br>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>No</th>
+            <th>Medicine Name</th>
+            <th>Medicine Description</th>
+            <th>Medicine Level</th>
+            <th>Manufacture Code</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Category</th>
+        </tr>
+        <% category.Medicines.forEach ((el, index) => { %>
+            <tr>
+                <td><%= ++index %></td>
+                <td><%= el.name %></td>
+                <td><%= el.description %></td>
+                <td><%= el.medicineLevel %></td>
+                <td><%= el.manufactureCode %></td>
+                <td><%= el.stock %></td>
+                <td><%= formatCurrency(el.price) %></td>
+                <td><%= category.name %></td>
+                <td>
+                    <a href="/category/<%= category.id %>/medicine/<%= el.id %>/edit"><button>Edit</button></a>
+                    <a href="/category/<%= category.id %>/medicine/<%= el.id %>/delete"><button>Delete</button></a>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

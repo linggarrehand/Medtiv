@@ -17,10 +17,16 @@ module.exports = (sequelize, DataTypes) => {
     medicineLevel: DataTypes.STRING,
     manufactureCode: DataTypes.STRING,
     stock: DataTypes.INTEGER,
-    price: DataTypes.INTEGER
+    price: DataTypes.INTEGER,
+    CategoryId : DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Medicine',
   });
+  Medicine.beforeCreate((medicine, options) => {
+    if (medicine.medicineLevel === "High") return medicine.manufactureCode = `1170-${new Date().getTime()}`
+    if (medicine.medicineLevel === "Medium") return medicine.manufactureCode = `5431-${new Date().getTime()}`
+    if (medicine.medicineLevel === "Low") return medicine.manufactureCode = `9984-${new Date().getTime()}`
+  })
   return Medicine;
 };

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medicine</title>
+</head>
+<body>
+    <h1>Add Medicine</h1>
+    <div>
+        <a href="/category/<%= category.id %>"><button>Back</button></a>
+    </div><br>
+    <table>
+        <form action="/category/<%= category.id %>/medicine/add" method="post">
+            <div>
+                <label>Medicine Name</label><br>
+                <input type="text" name="name">
+            </div> <br>
+            <div>
+                <label>Medicine Description</label><br>
+                <input type="text" name="description">
+            </div> <br>
+            <div>
+                <label>Medicine Level</label><br>
+                <select name="medicineLevel">
+                    <% const levelArr = ['High', 'Medium', 'Low'] %>
+                    <% levelArr.forEach (el => { %>
+                        <option value="<%= el %>"><%= el %> </option>
+                    <% }) %>  
+                </select>
+            </div> <br>
+            <div>
+                <label>Stock</label><br>
+                <input type="number" name="stock">
+            </div> <br>
+            <div>
+                <label>Price</label><br>
+                <input type="number" name="price">
+            </div> <br>
+            <input type="submit" value="Add Medicine">
+        </form>
+    </table>
+</body>
+</html>
