@@ -13,6 +13,8 @@
             <th> No </th>
             <th>Name</th>
             <th>Action</th>
+            <th>Link</th>
+
         </tr>
         <% category.forEach ((el, index) => { %>
             <tr>
@@ -21,8 +23,18 @@
                 <td>
                     <a href="/category/<%= el.id %>"><button>show medicine</button></a>
                 </td>
+                
+
             </tr>
         <% }) %>
     </table>
+    <% result2.videos.forEach ((el, index) => { %>
+     <pre>
+        <%= el.title%>  
+        
+        <a href="<%= el.link%>"> dont you dare to click this!</a>
+        
+    </pre>
+    <% }) %>
 </body>
 </html>

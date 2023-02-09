@@ -38,7 +38,7 @@
         <% category.Medicines.forEach ((el, index) => { %>
             <tr>
                 <td><%= ++index %></td>
-                <td><%= el.name %></td>
+                <td><%= (el.name) + el.fullName %></td>
                 <td><%= el.description %></td>
                 <td><%= el.medicineLevel %></td>
                 <td><%= el.manufactureCode %></td>
