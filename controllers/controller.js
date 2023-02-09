@@ -28,7 +28,9 @@ class Controller {
                     const isValidPassword = bcrypt.compareSync (password, user.password)
                     if (isValidPassword) {
                         req.session.userId = user.id
-                        return res.redirect ('/category')
+                        req.session.save (() => {
+                            return res.redirect ('/category')
+                        })
                     } else {
                         const err = 'Invalid password'
                         return res.redirect (`/login?error=${err}`)

@@ -9,9 +9,11 @@ router.get ('/login', Controller.loginForm)
 router.post ('/login', Controller.postLogin)
 
 router.use((req, res, next) => {
-  // need to add session condition
-  // console.log('Time: ', Date.now())
-  next()
+if (req.session.userId) {
+  next ()
+} else {
+  res.send ('you have to login first')
+}
 })
 
 router.get ('/category', Controller.showCategory)
