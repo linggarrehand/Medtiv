@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       UserProfile.belongsTo (models.User)
     }
+
+    
   }
   UserProfile.init({
     firstName: DataTypes.STRING,

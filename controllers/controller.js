@@ -1,50 +1,60 @@
-const {Category, Medicine, Transaction, User, UserProfile} = require ('../models')
-const bcrypt = require ('bcryptjs')
+const { Category, Medicine, Transaction, User, UserProfile } = require('../models')
+const bcrypt = require('bcryptjs')
 const { formatCurrency } = require('../helpers')
 const { Op } = require('sequelize')
-class Controller {
-    static landingPage (req, res) {
-        res.render ('landing-page')
-    }
-    static registerForm (req, res) {
-        res.render ('register-form')
-    }
-    static postRegister (req, res) {
-        const {email, password, role} = req.body
-        User.create ({email, password, role})
-        .then (() => res.redirect ('/login'))
-        .catch (err => res.send (err))
-    }
-    static loginForm (req, res) {
-        const {error} = req.query
+const { youtube } = require('scrape-youtube')
 
-        res.render ('login-form', {error})
+class Controller {
+    static landingPage(req, res) {
+        res.render('landing-page')
     }
-    static postLogin (req, res) {
-        const {email, password} = req.body
-        User.findOne ({where : {email} })
-            .then (user => {
+    static registerForm(req, res) {
+        res.render('register-form')
+    }
+    static postRegister(req, res) {
+        const { email, password, role } = req.body
+        User.create({ email, password, role })
+            .then(() => res.redirect('/login'))
+            .catch(err => res.send(err))
+    }
+    static loginForm(req, res) {
+        const { error } = req.query
+
+        res.render('login-form', { error })
+    }
+    static postLogin(req, res) {
+        const { email, password } = req.body
+        User.findOne({ where: { email } })
+            .then(user => {
                 if (user) {
-                    const isValidPassword = bcrypt.compareSync (password, user.password)
+                    const isValidPassword = bcrypt.compareSync(password, user.password)
                     if (isValidPassword) {
                         req.session.userId = user.id
-                        req.session.save (() => {
-                            return res.redirect ('/category')
+                        req.session.save(() => {
+                            return res.redirect('/category')
                         })
                     } else {
                         const err = 'Invalid password'
-                        return res.redirect (`/login?error=${err}`)
+                        return res.redirect(`/login?error=${err}`)
                     }
                 } else {
                     const err = 'Invalid email'
-                    return res.redirect (`/login?error=${err}`)
+                    return res.redirect(`/login?error=${err}`)
                 }
             })
-            .catch (err => res.send(err))
+            .catch(err => res.send(err))
     }
     static showCategory(req, res) {
+        let category
         Category.findAll()
-            .then(category => res.render('category', { category }))
+            .then(result => {
+                category = result
+                return youtube.search('obat medis')
+            })
+            .then(result2 => {
+                res.render('category', { category, result2 })
+                // res.send(result2)
+            })
             .catch(err => res.send(err))
     }
     static showMedicineCategory(req, res) {
@@ -55,12 +65,10 @@ class Controller {
         }
         if (search) {
             options = {
-                include : {
-                    model : Medicine,
-                    where : {
-                        name : {
-                            [Op.iLike] : `%${search}%`
-                        }
+                include: {
+                    model: Medicine,
+                    where: {
+                        name: Medicine.search_medic(search)
                     }
                 }
             }
@@ -69,29 +77,29 @@ class Controller {
             .then((category) => res.render('detail-category', { category, formatCurrency, success }))
             .catch(err => res.send(err))
     }
-    static addMedicine (req, res) {
+    static addMedicine(req, res) {
         const { categoryId } = req.params
-        const {error} = req.query
+        const { error } = req.query
         Category.findByPk(categoryId)
             .then(category => res.render('add-medicine', { category, error }))
             .catch(err => res.send(err))
     }
-    static createMedicine (req, res) {
+    static createMedicine(req, res) {
         let { categoryId } = req.params
         let CategoryId = categoryId
         const { name, description, medicineLevel, stock, price } = req.body
         Medicine.create({ name, description, medicineLevel, stock, price, CategoryId })
             .then(() => res.redirect(`/category/${CategoryId}`))
-            .catch (err => {
+            .catch(err => {
                 if (err.name === 'SequelizeValidationError') {
-                    const errors = err.errors.map ((el) => el.message)
-                    res.redirect (`/category/${categoryId}/medicine/add?error=${errors}`)
+                    const errors = err.errors.map((el) => el.message)
+                    res.redirect(`/category/${categoryId}/medicine/add?error=${errors}`)
                 } else {
-                    res.send (err)
+                    res.send(err)
                 }
             })
     }
-    static editMedicine (req, res) {
+    static editMedicine(req, res) {
         const { categoryId, medicineId } = req.params
         let medicineData
         Medicine.findByPk(medicineId)
@@ -102,7 +110,7 @@ class Controller {
             .then(category => res.render('edit-medicine', { category, medicineData }))
             .catch(err => res.send(err))
     }
-    static updateMedicine (req, res) {
+    static updateMedicine(req, res) {
         const { categoryId, medicineId } = req.params
         const id = medicineId
         const CategoryId = categoryId
@@ -115,7 +123,7 @@ class Controller {
             .then(() => res.redirect(`/category/${CategoryId}`))
             .catch(err => res.send(err))
     }
-    static deleteMedicine (req, res) {
+    static deleteMedicine(req, res) {
         const { categoryId, medicineId } = req.params
         let medicineName
         let medicineLevel

@@ -1,73 +1,88 @@
 'use strict';
 const {
-  Model
+  Model, Op
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Medicine extends Model {
     static associate(models) {
-      Medicine.belongsTo (models.Category)
+      Medicine.belongsTo(models.Category)
       Medicine.belongsToMany(models.User, {
         through: models.Transaction
       })
     }
+
+    get fullName() {
+      let result = ' medtiv'
+
+      return result
+    }
+
+
+    static search_medic(name) {
+      if (!name) {
+        name = ''
+      } else {
+        return {[Op.iLike] : `%${name}%`}
+      }
+    }
   }
   Medicine.init({
     name: {
-      type : DataTypes.STRING,
-      allowNull : false,
-      validate : {
-        notNull : {
-          msg : "name is required"
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "name is required"
         },
-        notEmpty : {
-          msg : "name is required"
+        notEmpty: {
+          msg: "name is required"
         }
       }
     },
     description: {
-      type : DataTypes.STRING,
-      allowNull : false,
-      validate : {
-        notNull : {
-          msg : "description is required"
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "description is required"
         },
-        notEmpty : {
-          msg : "description is required"
+        notEmpty: {
+          msg: "description is required"
         }
       }
     },
     medicineLevel: DataTypes.STRING,
     manufactureCode: DataTypes.STRING,
     stock: {
-      type : DataTypes.INTEGER,
-      allowNull : false,
-      validate : {
-        notNull : {
-          msg : "stock is required"
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "stock is required"
         },
-        notEmpty : {
-          msg : "stock is required"
+        notEmpty: {
+          msg: "stock is required"
         },
         minimumStock(stock) {
-          if ((stock < 20 ) && ((this.medicineLevel) === 'High' || (this.medicineLevel) === 'Medium')) {
+          if ((stock < 20) && ((this.medicineLevel) === 'High' || (this.medicineLevel) === 'Medium')) {
             throw new Error('Minimum stock for medicine level high or medium is 20')
           }
         }
       }
     },
     price: {
-      type : DataTypes.INTEGER,
-      allowNull : false,
-      validate : {
-        notNull : {
-          msg : "price is required"
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "price is required"
         },
-        notEmpty : {
-          msg : "price is required"
+        notEmpty: {
+          msg: "price is required"
         }
       }
     },
-    CategoryId : DataTypes.INTEGER
+    CategoryId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Medicine',
