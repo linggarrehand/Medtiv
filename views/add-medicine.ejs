@@ -11,6 +11,9 @@
     <div>
         <a href="/category/<%= category.id %>"><button>Back</button></a>
     </div><br>
+    <div>
+        <p style="color:red;"><%= error %> </p>
+    </div>
     <table>
         <form action="/category/<%= category.id %>/medicine/add" method="post">
             <div>

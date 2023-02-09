@@ -69,8 +69,9 @@ class Controller {
     }
     static addMedicine (req, res) {
         const { categoryId } = req.params
+        const {error} = req.query
         Category.findByPk(categoryId)
-            .then(category => res.render('add-medicine', { category }))
+            .then(category => res.render('add-medicine', { category, error }))
             .catch(err => res.send(err))
     }
     static createMedicine (req, res) {
@@ -79,7 +80,14 @@ class Controller {
         const { name, description, medicineLevel, stock, price } = req.body
         Medicine.create({ name, description, medicineLevel, stock, price, CategoryId })
             .then(() => res.redirect(`/category/${CategoryId}`))
-            .catch(err => res.send(err))
+            .catch (err => {
+                if (err.name === 'SequelizeValidationError') {
+                    const errors = err.errors.map ((el) => el.message)
+                    res.redirect (`/category/${categoryId}/medicine/add?error=${errors}`)
+                } else {
+                    res.send (err)
+                }
+            })
     }
     static editMedicine (req, res) {
         const { categoryId, medicineId } = req.params

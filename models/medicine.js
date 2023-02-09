@@ -12,12 +12,61 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Medicine.init({
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
+    name: {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate : {
+        notNull : {
+          msg : "name is required"
+        },
+        notEmpty : {
+          msg : "name is required"
+        }
+      }
+    },
+    description: {
+      type : DataTypes.STRING,
+      allowNull : false,
+      validate : {
+        notNull : {
+          msg : "description is required"
+        },
+        notEmpty : {
+          msg : "description is required"
+        }
+      }
+    },
     medicineLevel: DataTypes.STRING,
     manufactureCode: DataTypes.STRING,
-    stock: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
+    stock: {
+      type : DataTypes.INTEGER,
+      allowNull : false,
+      validate : {
+        notNull : {
+          msg : "stock is required"
+        },
+        notEmpty : {
+          msg : "stock is required"
+        },
+        minimumStock(stock) {
+          if ((stock < 20 ) && ((this.medicineLevel) === 'High' || (this.medicineLevel) === 'Medium')) {
+            throw new Error('Minimum stock for medicine level high or medium is 20')
+          }
+        }
+      }
+    },
+    price: {
+      type : DataTypes.INTEGER,
+      allowNull : false,
+      validate : {
+        notNull : {
+          msg : "price is required"
+        },
+        notEmpty : {
+          msg : "price is required"
+        }
+      }
+    },
     CategoryId : DataTypes.INTEGER
   }, {
     sequelize,
